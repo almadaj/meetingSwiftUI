@@ -10,12 +10,35 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world! It's first")
+            Form{
+                Section{
+                    HStack{
+                        Image(systemName: "airplane")
+                        Text("Airplane Mode")
+                    }
+                    HStack{
+                        Image(systemName: "wifi")
+                        Text("Wi-Fi Settings")
+                        Spacer()
+                        Text("ALMADA 5G").font(.callout).foregroundColor(.gray)
+                    }
+                    HStack{
+                        Image(systemName: "gear")
+                        Text("Settings")
+                    }
+                }
+                Section{
+                    HStack{
+                        Image(systemName: "folder.fill.badge.plus")
+                        Text("Notifications")
+                    }
+                    HStack{
+                        Image(systemName: "speaker.3.fill")
+                        Text("Sounds & Haptics")
+                    }
+                }
+            }
         }
-        .padding()
     }
 }
 
