@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var isShow = 0
     var body: some View {
         VStack {
             Form{
@@ -38,6 +39,13 @@ struct ContentView: View {
                     }
                 }
             }
+            Button(action: {
+                isShow += 1
+            }, label: {
+                Text("Clique Aqui").frame(maxWidth: .infinity).multilineTextAlignment(.center).padding().cornerRadius(8)
+            }).frame(width: UIScreen.main.bounds.width/3)
+
+            Text("Counter: \(isShow.description)")
         }
     }
 }
