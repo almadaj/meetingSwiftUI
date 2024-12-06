@@ -8,30 +8,35 @@
 import SwiftUI
 
 struct SplashView: View {
-    @State var state: SplashUIState = .goToHomeScreen
+    @ObservedObject var viewModel: SplashViewModel
+    
+    var error: String? // Adicionado para permitir a exibição de erros
+    
     var body: some View {
-        switch state{
-        case .loading:
-            //1
-            LoadingView()
-            //2
-            loading
-            //3
-            loadingView()
-        case .goToSignInScreen:
-            Text("Carregar Tela de Login")
-        case .goToHomeScreen:
-            Text("Carregar Home")
-        case .error(let msg):
-            Text("Carregar Erro: \(msg)")
-        }
+        Group{
+            switch viewModel.uiState {
+            case .loading:
+                // Utilize qualquer uma das abordagens para carregar a view
+                LoadingView()
+            case .goToSignInScreen:
+                Text("Carregar Tela de Login")
+            case .goToHomeScreen:
+                Text("Carregar Home")
+            case .error(let msg):
+                loadingView(error: msg)
+            }
+        }.onAppear(perform: viewModel.onAppear)
     }
 }
-// 1. Declarando componente
-struct LoadingView: View {
-    var body: some View{
-        ZStack{
-            Image("logo").resizable().scaledToFit().frame(maxWidth: .infinity, maxHeight: .infinity)
+
+// Declarando componente para a tela de carregamento
+struct LoadingView: View { 
+    var body: some View {
+        ZStack {
+            Image("logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(20)
                 .background(Color.white)
                 .ignoresSafeArea()
@@ -39,33 +44,37 @@ struct LoadingView: View {
     }
 }
 
-// 2. Criando extensão
-extension SplashView{
-    var loading: some View{
-        ZStack{
-            Image("logo").resizable().scaledToFit().frame(maxWidth: .infinity, maxHeight: .infinity)
+// Função em extensão para criar a loading view com tratamento de erro
+extension SplashView {
+    func loadingView(error: String? = nil) -> some View {
+        ZStack {
+            Image("logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(20)
                 .background(Color.white)
                 .ignoresSafeArea()
+            
+            // Exibe alerta se houver um erro
+            if let error = error {
+                Text("")
+                    .alert(isPresented: .constant(true)) {
+                        Alert(
+                            title: Text("Habit"),
+                            message: Text(error),
+                            dismissButton: .default(Text("Ok"))
+                        )
+                    }
+            }
         }
     }
 }
 
-// 3. Função em extensão
-extension SplashView{
-    func loadingView() -> some View {
-        ZStack{
-            Image("logo").resizable().scaledToFit().frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(20)
-                .background(Color.white)
-                .ignoresSafeArea()
-        }
-    }
-}
-
-
+// Preview
 struct SplashView_Previews: PreviewProvider {
     static var previews: some View {
-        SplashView(state: .loading)
+        let viewModel = SplashViewModel()
+        SplashView(viewModel: viewModel)
     }
 }
